@@ -1,0 +1,13 @@
+# Version RANGES (not exact pins): written without being able to run pip in the authoring environment.
+# After a successful install on your laptop, freeze what actually worked:  pip freeze > requirements-lock.txt
+Flask>=3.0,<4.0
+pandas>=2.0,<4.0
+numpy>=1.26,<3.0
+scikit-learn>=1.4,<2.0
+torch>=2.4,<3.0
+transformers>=4.55,<5.0
+datasets>=3.2,<5.0
+langdetect==1.0.9
+psutil>=5.9
+pytest>=8.0
+gunicorn>=23.0

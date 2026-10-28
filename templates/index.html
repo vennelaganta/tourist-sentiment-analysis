@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero"><div class="container">
+  <div>
+    <span class="eyebrow" style="color:#7fe3da">NLP &middot; Multilingual Transformers &middot; Tourism Analytics</span>
+    <h1>Tourist <span>Sentiment</span> Analysis</h1>
+    <p class="sub">Turning traveler opinions into meaningful insights.</p>
+    <p>Sentiment analysis is an NLP technique that reads free-form text and decides whether the writer feels positive, negative or neutral. Here, a pretrained multilingual transformer reads a tourist review written in any of 16 supported languages &mdash; English, Spanish, French, German, Hindi, Japanese, Chinese, Arabic and more &mdash; and labels it automatically.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="{{ url_for('analyze') }}"><i data-lucide="sparkles"></i> Analyze Review</a>
+      <a class="btn btn-light" href="{{ url_for('about') }}"><i data-lucide="book-open"></i> About the project</a>
+    </div>
+  </div>
+  <svg class="scene" viewBox="0 0 480 360" role="img" aria-label="Illustration of mountains, sun and a travel pin">
+    <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c4a7a"/><stop offset="1" stop-color="#f7b267"/></linearGradient></defs>
+    <rect width="480" height="360" rx="28" fill="url(#sky)"/>
+    <circle cx="340" cy="120" r="46" fill="#ffd9a0" opacity=".95"/>
+    <path d="M0 270 L110 150 L190 235 L270 130 L380 250 L480 190 V360 H0Z" fill="#13315c"/>
+    <path d="M0 300 L90 225 L170 290 L260 215 L360 295 L480 240 V360 H0Z" fill="#0e8a82"/>
+    <path d="M0 335 Q120 300 240 325 T480 315 V360 H0Z" fill="#0b2545"/>
+    <g transform="translate(150 70)"><path d="M30 0C13 0 0 13 0 30c0 22 30 50 30 50s30-28 30-50C60 13 47 0 30 0z" fill="#f28c28"/><circle cx="30" cy="30" r="12" fill="#fff"/></g>
+    <g fill="#fff" opacity=".9"><circle cx="60" cy="60" r="2"/><circle cx="420" cy="50" r="2"/><circle cx="260" cy="40" r="1.5"/></g>
+  </svg>
+</div></section>
+
+<section class="section"><div class="container">
+  <div class="section-head reveal"><span class="eyebrow">Three outcomes</span><h2>Every review lands in one of three classes</h2>
+  <p>The classifier is trained on labelled reviews and predicts one of these sentiments.</p></div>
+  <div class="grid g3">
+    <article class="card s-pos hover reveal"><div class="icon-bubble pos"><i data-lucide="smile"></i></div><h3>Positive</h3><p class="muted">The visitor enjoyed the place: praise for views, service, food or value.</p><p class="quote">“Breathtaking sunset and very friendly guides.”</p></article>
+    <article class="card s-neg hover reveal"><div class="icon-bubble neg"><i data-lucide="frown"></i></div><h3>Negative</h3><p class="muted">The visitor was unhappy: complaints about cleanliness, crowding, cost or behaviour.</p><p class="quote">“Dirty, overcrowded and the staff were rude.”</p></article>
+    <article class="card s-neu hover reveal"><div class="icon-bubble neu"><i data-lucide="meh"></i></div><h3>Neutral</h3><p class="muted">Mostly factual or balanced text without a strong emotional lean.</p><p class="quote">“The fort opens at 9 am and has a small museum.”</p></article>
+  </div>
+</div></section>
+
+<section class="section alt"><div class="container">
+  <div class="section-head reveal"><span class="eyebrow">How it works</span><h2>From raw opinion to a clear label</h2></div>
+  <div class="grid g3">
+    <div class="card reveal"><div class="num">1</div><h3>You submit a review</h3><p class="muted">Type or paste a tourist review in any supported language on the Analyze page. It is sent to the Flask backend.</p></div>
+    <div class="card reveal"><div class="num">2</div><h3>The model reads it</h3><p class="muted">The language is detected (or chosen by you), the text is tokenized into subwords and passed to the multilingual transformer. Nothing is translated.</p></div>
+    <div class="card reveal"><div class="num">3</div><h3>You get the insight</h3><p class="muted">The predicted sentiment, confidence and language are shown, and saved so the Dashboard can summarise real usage.</p></div>
+  </div>
+</div></section>
+
+<section class="section"><div class="container">
+  <div class="section-head reveal"><span class="eyebrow">Machine learning workflow</span><h2>The prediction pipeline</h2></div>
+  <div class="flow reveal">
+    <div class="step"><i data-lucide="message-square-text"></i><b>Review Input</b><span>Any supported language</span></div><i class="arrow" data-lucide="arrow-right"></i>
+    <div class="step"><i data-lucide="languages"></i><b>Language Detection</b><span>Auto or user-selected</span></div><i class="arrow" data-lucide="arrow-right"></i>
+    <div class="step"><i data-lucide="scissors"></i><b>Subword Tokenization</b><span>Multilingual vocabulary</span></div><i class="arrow" data-lucide="arrow-right"></i>
+    <div class="step"><i data-lucide="brain-circuit"></i><b>Multilingual Transformer</b><span>XLM-RoBERTa fine-tuned</span></div><i class="arrow" data-lucide="arrow-right"></i>
+    <div class="step"><i data-lucide="badge-check"></i><b>Sentiment Prediction</b><span>Label + confidence</span></div>
+  </div>
+  <div style="text-align:center;margin-top:2.5rem"><a class="btn btn-teal" href="{{ url_for('analyze') }}"><i data-lucide="sparkles"></i> Try it now</a></div>
+</div></section>
+{% endblock %}

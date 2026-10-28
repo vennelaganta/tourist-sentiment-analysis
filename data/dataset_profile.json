@@ -1,0 +1,107 @@
+{
+  "dataset": "clapAI/MultiLingualSentiment",
+  "created_at": "2026-10-27T13:45:05+00:00",
+  "features": {
+    "text": "Value('string')",
+    "label": "Value('string')",
+    "source": "Value('string')",
+    "domain": "Value('string')",
+    "language": "Value('string')"
+  },
+  "split_sizes": {
+    "train": 3147478,
+    "validation": 393435,
+    "test": 393436
+  },
+  "sample": {
+    "rows": 2000,
+    "note": "Distributions below are from this streamed sample only, not the full dataset.",
+    "label_counts": {
+      "negative": 2000
+    },
+    "language_counts": {
+      "en": 740,
+      "zh": 218,
+      "ja": 173,
+      "fr": 167,
+      "es": 128,
+      "de": 124,
+      "ko": 113,
+      "ru": 104,
+      "ar": 90,
+      "vi": 82,
+      "pt": 31,
+      "tr": 18,
+      "id": 5,
+      "ms": 3,
+      "hi": 2,
+      "multilingual": 2
+    },
+    "domain_counts": {
+      "amazon reviews": 617,
+      "places reviews": 182,
+      "tweets": 147,
+      "hotel reviews": 146,
+      "movie reviews": 134,
+      "products reviews": 93,
+      "app reviews": 92,
+      "restaurant reviews ": 81,
+      "emotion": 80,
+      "organization reviews": 67,
+      "books reviews": 64,
+      "company reviews": 53,
+      "22 domains": 52,
+      "reviews (hotels, books, movies, products and a few airlines)": 49,
+      "reviews (app, products)": 46,
+      "GPT reviews": 27,
+      "airlines reviews": 26,
+      "finance": 15,
+      "banking reviews": 12,
+      "education": 10,
+      "courses reviews": 5,
+      "media posts": 2
+    },
+    "text_length_chars": {
+      "median": 140.0,
+      "max": 6787,
+      "p95": 1227
+    },
+    "examples": [
+      {
+        "text": "膏体跟我以前用的不一样很稀不需要乳化而且用了皮肤过敏瘙痒变红\n几乎可以肯定里面的东西是假的，膏体跟我以前用的完全不一样，之前在天猫旗舰店买的那一支膏体十分黏稠，需要乳化才可以涂脸，但是在亚马逊买的这一瓶膏体很稀根本不需要乳化，但是因为相信亚马逊所以我第一反应不是觉得是假货，还觉得",
+        "label": "negative",
+        "source": "https://huggingface.co/datasets/mteb/amazon_reviews_multi",
+        "domain": "amazon reviews",
+        "language": "zh"
+      },
+      {
+        "text": "I am writing this review after seeing BBQ Nights advertise their Excellent TripAdvisor rating. The last time I went to this restaurant was a",
+        "label": "negative",
+        "source": "https://www.kaggle.com/datasets/choonkhonng/malaysia-restaurant-review-datasets",
+        "domain": "restaurant reviews ",
+        "language": "en"
+      },
+      {
+        "text": "I stayed at Hilton Garden Inn with my teenage daughter. Since it was graduation week, the better hotels in the city were full, so we took a ",
+        "label": "negative",
+        "source": "https://huggingface.co/datasets/sabulaban/sentiment",
+        "domain": "hotel reviews",
+        "language": "en"
+      },
+      {
+        "text": "To start on a positive note: The location is great and that says it all.\nAs soon as we arrived the hotel people were putting up a \"sorry, no",
+        "label": "negative",
+        "source": "https://huggingface.co/datasets/sabulaban/sentiment",
+        "domain": "hotel reviews",
+        "language": "en"
+      },
+      {
+        "text": "생각없는 여자들이나 좋아할 영화.",
+        "label": "negative",
+        "source": "https://data.niaid.nih.gov/resources?id=mendeley_jb5knzh8yv",
+        "domain": "movie reviews",
+        "language": "ko"
+      }
+    ]
+  }
+}

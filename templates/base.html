@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Tourist Sentiment Analysis{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav"><div class="container">
+  <a class="brand" href="{{ url_for('index') }}"><i data-lucide="map-pinned" aria-hidden="true"></i> Tourist Sentiment</a>
+  <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false"><i data-lucide="menu"></i></button>
+  <nav aria-label="Main"><ul id="menu">
+    {% for ep, label in [('index','Home'),('analyze','Analyze'),('dashboard','Dashboard'),('about','About'),('dataset','Dataset')] %}
+    <li><a class="link {{ 'active' if request.endpoint == ep }}" href="{{ url_for(ep) }}">{{ label }}</a></li>
+    {% endfor %}
+  </ul></nav>
+</div></header>
+<main id="main">{% block content %}{% endblock %}</main>
+<footer><div class="container">
+  <span>Tourist Place Reviews Sentiment Classification &middot; B.Tech CSE (AI &amp; ML)</span>
+  <span class="pill"><span class="dot" id="healthDot"></span><span id="healthText">Checking model&hellip;</span></span>
+</div></footer>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body></html>

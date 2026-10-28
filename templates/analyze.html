@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Analyze Review &middot; Tourist Sentiment{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container"><span class="eyebrow" style="color:#7fe3da">Live prediction</span><h1>Analyze a tourist review</h1>
+<p>Write or paste a review in any of the 16 supported languages. It is sent to the Flask backend and classified by a pretrained multilingual transformer.</p></div></section>
+<section class="container pull-up" style="padding-bottom:3rem">
+  <div class="grid g2" style="align-items:start">
+    <div class="card">
+      <label for="review">Tourist review</label>
+      <textarea id="review" maxlength="5000" placeholder="e.g. The beach was clean and the sunset was magical… / 景色が本当に素晴らしかった / El hotel era precioso…" aria-describedby="count"></textarea>
+      <div class="row between small muted" style="margin:.4rem 0 1rem"><span id="count">0 / 5000</span></div>
+      <div class="grid g2" style="margin-bottom:1rem;gap:1rem">
+        <div><label for="lang">Review language</label>
+          <select id="lang"><option value="auto">Auto-detect</option></select></div>
+        <div><label for="exampleSel">Multilingual examples</label>
+          <select id="exampleSel"><option value="">Load an example…</option>
+            <option value="El hotel estaba justo frente a la playa y el personal fue amabilísimo. ¡Volveremos sin duda!" data-lang="es">Spanish – hotel</option>
+            <option value="Restaurant très décevant : service lent, plats froids et addition beaucoup trop chère." data-lang="fr">French – restaurant</option>
+            <option value="Wir waren am Samstag im Museum. Es öffnet um 10 Uhr und der Eintritt kostet zwölf Euro." data-lang="de">German – museum</option>
+            <option value="景色が本当に素晴らしく、スタッフもとても親切でした。また訪れたいです。" data-lang="ja">Japanese – scenery</option>
+            <option value="होटल बहुत गंदा था और कर्मचारियों का व्यवहार बहुत खराब था।" data-lang="hi">Hindi – hotel</option>
+            <option value="المكان رائع جدا والطعام لذيذ والخدمة ممتازة." data-lang="ar">Arabic – restaurant</option>
+            <option value="景点人太多了，排队两个小时，门票还很贵，非常失望。" data-lang="zh">Chinese – attraction</option>
+            <option value="Tempat wisata ini sangat bersih dan pemandangannya indah sekali." data-lang="id">Indonesian – attraction</option>
+          </select></div>
+      </div>
+      <p class="small muted" style="margin-bottom:.5rem"><b>English examples:</b></p>
+      <div class="row" style="margin-bottom:1.2rem">
+        <button type="button" class="chip pos" data-example="The sunset view from the hilltop was breathtaking and the local guides were friendly and helpful. Totally worth the trip!">Positive example</button>
+        <button type="button" class="chip neg" data-example="Terrible experience. The place was dirty, overcrowded and the staff were rude. Ticket prices were far too high for what we got.">Negative example</button>
+        <button type="button" class="chip neu" data-example="We visited the fort on Sunday. The entry is at 9 am and there is a small museum inside. It was an average visit.">Neutral example</button>
+      </div>
+      <div class="row">
+        <button class="btn btn-primary" id="analyzeBtn" type="button"><i data-lucide="sparkles"></i><span>Analyze Sentiment</span></button>
+        <button class="btn btn-ghost" id="clearBtn" type="button"><i data-lucide="eraser"></i> Clear</button>
+      </div>
+      <div id="alert" class="hidden" role="alert" aria-live="assertive"></div>
+    </div>
+
+    <div class="card" aria-live="polite">
+      <div id="placeholder" class="empty"><i data-lucide="radar"></i><h3>Your result appears here</h3><p>Enter a review and press <b>Analyze Sentiment</b>.</p></div>
+      <div id="result" class="result hidden">
+        <span class="small muted">Predicted sentiment</span>
+        <div class="big-label" id="resLabel"></div>
+        <p class="small muted" id="resConf"></p>
+        <p class="small" id="resLang" style="margin:.2rem 0 .6rem"></p>
+        <ul class="clean small hidden" id="warnList" style="color:#8a5200"></ul>
+        <div id="chartWrap"><h4>Class probabilities</h4><div class="chart-box"><canvas id="probChart" aria-label="Horizontal bar chart of class probabilities" role="img"></canvas></div></div>
+        <p class="small muted hidden" id="noProb">This model does not provide probability estimates.</p>
+        <h4 style="margin-top:1.2rem">Submitted review</h4><div class="review-box" id="resReview"></div>
+        <h4 style="margin-top:1.2rem">Explanation</h4><p id="resExplain"></p>
+        <button class="btn btn-teal" id="againBtn" type="button"><i data-lucide="rotate-ccw"></i> Analyze another review</button>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/analyze.js') }}"></script>
+{% endblock %}

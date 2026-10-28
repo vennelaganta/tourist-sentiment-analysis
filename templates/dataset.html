@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Dataset &middot; Tourist Sentiment{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container"><span class="eyebrow" style="color:#7fe3da">Data management</span><h1>Dataset</h1>
+<p>The project&rsquo;s dataset is <b>clapAI/MultiLingualSentiment</b> on Hugging Face, streamed on demand. You can also inspect any CSV of your own below.</p></div></section>
+<section class="container pull-up" style="padding-bottom:3rem">
+  <div class="card" style="margin-bottom:1.4rem">
+    <h3>clapAI/MultiLingualSentiment</h3>
+    <p class="small muted">Streamed with the Hugging Face <code>datasets</code> library &mdash; nothing is downloaded in full or converted to a giant CSV.</p>
+    <div id="profileEmpty" class="empty hidden"><i data-lucide="database"></i><h3>Dataset not inspected yet</h3><p>Run this once to read the real schema and distributions:</p><pre style="display:inline-block;text-align:left">python inspect_dataset.py --quick</pre></div>
+    <div id="profileBody" class="hidden">
+      <div class="grid g3"><div class="card stat"><div><div class="v" id="pSplits" style="font-size:1.1rem">–</div><div class="l">Split sizes (dataset metadata)</div></div></div>
+        <div class="card stat"><div><div class="v" id="pCols" style="font-size:1.1rem">–</div><div class="l">Columns</div></div></div>
+        <div class="card stat"><div><div class="v" id="pSample">–</div><div class="l">Rows in inspected sample</div></div></div></div>
+      <div class="grid g2" style="margin-top:1.2rem"><div><h4>Label distribution (sample)</h4><div class="chart-box"><canvas id="pLabels" role="img" aria-label="Label distribution"></canvas></div></div>
+        <div><h4>Language distribution (sample)</h4><div class="chart-box"><canvas id="pLangs" role="img" aria-label="Language distribution"></canvas></div></div></div>
+      <p class="small muted" id="pNote" style="margin:1rem 0 0"></p>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Inspect your own CSV</h3>
+    <label for="file" class="drop" id="drop" style="font-weight:600"><i data-lucide="upload-cloud"></i><br><span id="dropText">Click to choose a <b>.csv</b> file (max 10 MB) or drag it here</span></label>
+    <input type="file" id="file" accept=".csv,text/csv" class="hidden">
+    <p class="small muted" style="margin:.8rem 0 0">Files are saved as plain data under a random name, only ever read by pandas, and never executed.</p>
+    <div id="alert" class="hidden" role="alert" aria-live="assertive"></div>
+  </div>
+
+  <div id="out" class="hidden">
+    <div class="grid g3" style="margin-top:1.4rem">
+      <div class="card stat"><div class="icon-bubble navy"><i data-lucide="rows-3"></i></div><div><div class="v" id="nRows">–</div><div class="l">Rows</div></div></div>
+      <div class="card stat"><div class="icon-bubble navy"><i data-lucide="columns-3"></i></div><div><div class="v" id="nCols">–</div><div class="l">Columns</div></div></div>
+      <div class="card stat"><div class="icon-bubble navy"><i data-lucide="file-text"></i></div><div><div class="v" style="font-size:1.1rem;word-break:break-all" id="fname">–</div><div class="l">File</div></div></div>
+    </div>
+
+    <div class="grid g2" style="margin-top:1.4rem;align-items:start">
+      <div class="card"><h3>Columns &amp; missing values</h3><div class="table-wrap"><table id="colTable"></table></div></div>
+      <div class="card"><h3>Choose columns</h3>
+        <label for="textCol">Review-text column</label><select id="textCol"></select>
+        <label for="labelCol" style="margin-top:1rem">Sentiment-label column <span class="muted">(optional)</span></label><select id="labelCol"></select>
+        <button class="btn btn-teal" id="checkBtn" type="button" style="margin-top:1.2rem"><i data-lucide="scan-search"></i> Validate selection</button>
+        <div id="summary" class="hidden" style="margin-top:1.2rem"></div>
+        <div id="cmdBox" class="hidden" style="margin-top:1rem"><p class="small muted" style="margin-bottom:.4rem">Command to use this CSV with the optional classical baseline (<code>classical_baseline\train_model.py</code>):</p><pre id="cmd"></pre></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1.4rem"><h3>Preview (first 10 rows)</h3><div class="table-wrap"><table id="prevTable"></table></div></div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script><script src="{{ url_for('static', filename='js/dataset.js') }}"></script>{% endblock %}

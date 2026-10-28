@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Dashboard &middot; Tourist Sentiment{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container"><span class="eyebrow" style="color:#7fe3da">Analytics</span><h1>Dashboard</h1>
+<p>Statistics are calculated from the predictions saved by the Analyze page, followed by the measured evaluation of the trained model.</p></div></section>
+<section class="container pull-up" style="padding-bottom:3rem">
+  <div class="row between" style="margin-bottom:1rem"><span></span>
+    <button class="btn btn-teal" id="refreshBtn" type="button"><i data-lucide="refresh-cw"></i> Refresh dashboard</button></div>
+  <div id="dashAlert" class="hidden" role="alert"></div>
+
+  <div class="grid g4">
+    <div class="card stat"><div class="icon-bubble navy"><i data-lucide="messages-square"></i></div><div><div class="v" id="sTotal">–</div><div class="l">Total reviews analyzed</div></div></div>
+    <div class="card stat"><div class="icon-bubble pos"><i data-lucide="smile"></i></div><div><div class="v" id="sPos">–</div><div class="l">Positive</div></div></div>
+    <div class="card stat"><div class="icon-bubble neg"><i data-lucide="frown"></i></div><div><div class="v" id="sNeg">–</div><div class="l">Negative</div></div></div>
+    <div class="card stat"><div class="icon-bubble neu"><i data-lucide="meh"></i></div><div><div class="v" id="sNeu">–</div><div class="l">Neutral</div></div></div>
+  </div>
+
+  <div id="emptyState" class="card empty hidden" style="margin-top:1.4rem"><i data-lucide="inbox"></i><h3>No predictions yet</h3>
+    <p>Analyze a few reviews and the charts and table will fill in with real data.</p><a class="btn btn-primary" href="{{ url_for('analyze') }}">Analyze a review</a></div>
+
+  <div id="charts" class="grid g2" style="margin-top:1.4rem">
+    <div class="card"><h3>Sentiment distribution</h3><div class="chart-box tall"><canvas id="doughnut" role="img" aria-label="Doughnut chart of sentiment distribution"></canvas></div></div>
+    <div class="card"><h3>Class comparison</h3><div class="chart-box tall"><canvas id="bars" role="img" aria-label="Bar chart comparing sentiment counts"></canvas></div></div>
+    <div class="card" style="grid-column:1/-1"><h3>Languages of analyzed reviews</h3><div class="chart-box"><canvas id="langChart" role="img" aria-label="Bar chart of review counts per language"></canvas></div></div>
+  </div>
+
+  <div class="card" style="margin-top:1.4rem">
+    <div class="row between" style="margin-bottom:1rem"><h3 style="margin:0">Recent predictions</h3>
+      <div class="row"><input type="search" id="q" placeholder="Search reviews…" aria-label="Search reviews" style="width:220px">
+        <select id="langFilter" aria-label="Filter by language" style="width:150px"><option value="">All languages</option></select>
+        <select id="filter" aria-label="Filter by sentiment" style="width:160px"><option value="">All sentiments</option><option>Positive</option><option>Negative</option><option>Neutral</option></select></div></div>
+    <div class="table-wrap"><table><thead><tr><th>Time (UTC)</th><th>Review</th><th>Language</th><th>Sentiment</th><th>Confidence</th></tr></thead><tbody id="rows"></tbody></table></div>
+    <p class="small muted" id="rowInfo" style="margin:.8rem 0 0"></p>
+  </div>
+
+  <div class="section-head" style="margin:3.5rem auto 1.5rem"><span class="eyebrow">Model evaluation</span><h2>Measured results of the multilingual model</h2>
+    <p>Every number below comes from an evaluation run you executed with <code>evaluate_model.py</code>.</p></div>
+  <div id="metricsEmpty" class="card empty hidden"><i data-lucide="flask-conical"></i><h3>No evaluation results found</h3>
+    <p>Run a small evaluation to generate real metrics:</p><pre style="display:inline-block;text-align:left">python evaluate_model.py --split validation --per-language 100</pre></div>
+  <div id="metricsBody" class="hidden">
+    <div class="card"><label for="runSel">Evaluation run</label><select id="runSel"></select><p id="metricsMeta" class="muted small" style="margin:.8rem 0 0"></p></div>
+    <div id="evalWarn" class="alert warn" style="margin-top:1.4rem"></div>
+    <div class="grid g4" style="margin-top:1.4rem">
+      <div class="card stat"><div><div class="v" id="mAcc">–</div><div class="l">Accuracy</div></div></div>
+      <div class="card stat"><div><div class="v" id="mMacro">–</div><div class="l">Macro F1</div></div></div>
+      <div class="card stat"><div><div class="v" id="mWeighted">–</div><div class="l">Weighted F1</div></div></div>
+      <div class="card stat"><div><div class="v" id="mBal">–</div><div class="l">Balanced accuracy</div></div></div>
+    </div>
+    <p class="small muted" style="margin:.7rem 0 0"><b>Macro</b> = unweighted mean over the three classes; <b>weighted</b> = weighted by class size; <b>balanced accuracy</b> = mean per-class recall (robust to class imbalance).</p>
+    <div class="grid g2" style="margin-top:1.4rem">
+      <div class="card"><h4>Per-class metrics</h4><div class="table-wrap"><table id="classTable"></table></div></div>
+      <div class="card"><h4>Confusion matrix</h4><div class="table-wrap"><table id="cmTable"></table></div><p class="small muted" style="margin:.7rem 0 0">Rows = true class, columns = predicted class.</p></div>
+    </div>
+    <div class="card" style="margin-top:1.4rem"><h4>Performance by language</h4>
+      <div class="chart-box tall"><canvas id="langF1" role="img" aria-label="Macro F1 per language"></canvas></div>
+      <div class="table-wrap" style="margin-top:1rem"><table id="langTable"></table></div>
+      <p class="small muted" style="margin:.7rem 0 0">Languages with fewer evaluation examples than the threshold are marked <b>low n</b>: their scores are too noisy to compare.</p></div>
+    <div class="card" style="margin-top:1.4rem"><h4>Performance by domain (in this sample)</h4><div class="table-wrap"><table id="domTable"></table></div></div>
+    <div class="card" style="margin-top:1.4rem"><h4>Evaluation sample</h4><p class="small" id="sampleInfo" style="margin:0"></p></div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

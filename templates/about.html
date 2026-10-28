@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}About &middot; Tourist Sentiment{% endblock %}
+{% block content %}
+<section class="page-head"><div class="container"><span class="eyebrow" style="color:#7fe3da">Project report</span><h1>About the project</h1>
+<p>Tourist Place Reviews Sentiment Classification Using Machine Learning &mdash; B.Tech CSE (AI &amp; ML) interdisciplinary project.</p></div></section>
+
+<section class="container pull-up">
+  <div class="card reveal"><h2>Abstract</h2>
+  <p>Tourist reviews carry first-hand information about what visitors think of a destination, but travellers write in many languages and reading thousands of reviews by hand is slow and inconsistent. This project classifies a review written in any of 16 supported languages as positive, negative or neutral. It uses a pretrained multilingual transformer (XLM-RoBERTa, fine-tuned by clapAI on the 3.9-million-review MultiLingualSentiment dataset) for inference, with automatic language detection. Performance is measured on held-out samples and reported per class and per language.</p></div>
+</section>
+
+<section class="section"><div class="container grid g2">
+  <div class="card reveal"><div class="icon-bubble neg"><i data-lucide="alert-triangle"></i></div><h3>Problem statement</h3>
+  <p class="muted">Thousands of new reviews are posted about tourist destinations every day. Star ratings alone do not explain <i>why</i> a visitor was happy or unhappy, and reading every review manually does not scale.</p>
+  <ul class="clean"><li>Manual reading is too slow for the volume of text.</li><li>A rating hides the reason behind it.</li><li>Different readers judge the same review differently.</li><li>Recurring complaints and trends are missed.</li></ul></div>
+  <div class="card reveal"><div class="icon-bubble"><i data-lucide="target"></i></div><h3>Objectives</h3>
+  <ul class="clean"><li>Automate the reading of large volumes of tourist reviews.</li><li>Classify each review as positive, negative or neutral, in any supported language.</li><li>Use a pretrained multilingual transformer instead of language-specific rules.</li><li>Measure accuracy, macro/weighted F1 and per-language performance honestly.</li><li>Give tourists and tourism organisations data-backed insight.</li><li>Keep the application understandable and easy to extend.</li></ul></div>
+</div></section>
+
+<section class="section alt"><div class="container grid g2">
+  <div class="card reveal"><h3>Existing system &amp; limitations</h3>
+  <ul class="clean"><li><b>Manual review reading</b> &ndash; slow, expensive, impossible to scale.</li><li><b>Star-rating summaries</b> &ndash; average scores hide the actual reasons.</li><li><b>Simple keyword matching</b> &ndash; misjudges sarcasm, negation and mixed opinions.</li><li><b>No trend tracking</b> &ndash; rarely shows how sentiment changes over time.</li></ul></div>
+  <div class="card reveal"><h3>Proposed system &amp; advantages</h3>
+  <ul class="clean"><li><b>Fully automated</b> classification by trained ML models.</li><li><b>Multilingual</b> &ndash; one model handles 16 languages without translating reviews first, so the original text is preserved.</li><li><b>Context-aware</b> &ndash; a transformer reads whole sentences, so negation and word order are captured.</li><li><b>Fast and scalable</b> &ndash; thousands of reviews in seconds.</li><li><b>Measurable</b> &ndash; results are comparable through standard metrics.</li></ul></div>
+</div></section>
+
+<section class="section"><div class="container">
+  <div class="section-head reveal"><span class="eyebrow">System architecture</span><h2>Six-stage pipeline</h2></div>
+  <div class="flow reveal">
+    <div class="step"><i data-lucide="database"></i><b>Dataset</b><span>clapAI/MultiLingualSentiment (streamed)</span></div><i class="arrow" data-lucide="arrow-right"></i>
+    <div class="step"><i data-lucide="eraser"></i><b>Preprocessing</b><span>Whitespace/control-char cleanup only</span></div><i class="arrow" data-lucide="arrow-right"></i>
+    <div class="step"><i data-lucide="languages"></i><b>Language ID</b><span>langdetect or user choice</span></div><i class="arrow" data-lucide="arrow-right"></i>
+    <div class="step"><i data-lucide="cpu"></i><b>Transformer inference</b><span>Flask + PyTorch (CPU ok)</span></div><i class="arrow" data-lucide="arrow-right"></i>
+    <div class="step"><i data-lucide="bar-chart-3"></i><b>Evaluation &amp; insights</b><span>Dashboard</span></div>
+  </div>
+</div></section>
+
+<section class="section alt"><div class="container">
+  <div class="section-head reveal"><span class="eyebrow">Machine learning algorithms</span><h2>Algorithms in this project</h2></div>
+  <div class="grid g2">
+    <div class="card reveal" style="grid-column:1/-1;border-top:5px solid var(--teal)"><span class="tag">Used by the website &middot; inference</span><h3 style="margin-top:.5rem">Multilingual transformer: XLM-RoBERTa-base (clapAI fine-tune)</h3><p class="muted">A pretrained transformer (278M parameters) that represents text as subword tokens and learns context with self-attention. clapAI fine-tuned it on the train split of the MultiLingualSentiment dataset to output positive / negative / neutral. This project downloads the published model and runs it; <b>it does not train or fine-tune a model on your laptop</b>. A lighter alternative, mmBERT-small (140M parameters), can be selected with one environment variable.</p></div>
+    <div class="card reveal"><span class="tag" style="background:#eef0f4;color:#5b6b82">Classical background &middot; optional baseline</span><h3 style="margin-top:.5rem">Multinomial Naive Bayes</h3><p class="muted">Probabilistic classifier assuming words are independent given the class. Fast, but it works on word counts, so it has no notion of meaning across languages.</p></div>
+    <div class="card reveal"><span class="tag" style="background:#eef0f4;color:#5b6b82">Classical background &middot; optional baseline</span><h3 style="margin-top:.5rem">Support Vector Machine (SVM)</h3><p class="muted">Finds the maximum-margin separating hyperplane; strong on sparse TF-IDF features of a single language, but a model trained on one language cannot classify another.</p></div>
+    <div class="card reveal"><span class="tag" style="background:#eef0f4;color:#5b6b82">Classical background &middot; optional baseline</span><h3 style="margin-top:.5rem">Random Forest</h3><p class="muted">An ensemble of decision trees combined by voting. Robust, but like the other classical models it needs language-specific text features.</p></div>
+    <div class="card reveal"><span class="tag" style="background:#fdf0dc;color:#a45d0c">Discussed, not implemented</span><h3 style="margin-top:.5rem">LSTM / BiLSTM</h3><p class="muted">Recurrent sequence models that read words in order (BiLSTM in both directions). They are part of the project&rsquo;s literature survey; <b>this website does not include or run an LSTM/BiLSTM model.</b> Transformers have largely replaced them for multilingual text.</p></div>
+  </div>
+  <p class="small muted reveal" style="margin-top:1rem">The literature survey in the project report cites Wadhe &amp; Suratkar (2020), who found TF-IDF with Random Forest gave the best accuracy (86%) among the traditional methods they tested. That figure is from the literature, not from this system &mdash; this system&rsquo;s own results are on the Dashboard.</p>
+</div></section>
+
+<section class="section"><div class="container">
+  <div class="section-head reveal"><span class="eyebrow">Feature extraction</span><h2>Count Vectorizer, TF-IDF and subword tokens</h2></div>
+  <div class="grid g2">
+    <div class="card reveal"><h3>Count Vectorizer (Bag of Words)</h3><p class="muted">Builds a vocabulary of all words and represents each review as a vector of word counts. Simple, but very common words (&ldquo;the&rdquo;, &ldquo;place&rdquo;) get large values even though they say little about sentiment.</p></div>
+    <div class="card reveal"><h3>TF-IDF</h3><p class="muted">Re-weights each word by how informative it is: frequent in this review, rare across all reviews. Used by the classical baselines; <b>not</b> by the live multilingual model.</p>
+    <div class="formula">TF-IDF(t,d) = TF(t,d) &times; IDF(t)<br>IDF(t) = log( N / df(t) )  &nbsp;(scikit-learn uses a smoothed variant)</div></div>
+  </div>
+  <div class="card reveal" style="margin-top:1.4rem"><h3>Subword tokenization (what the live model uses)</h3><p class="muted" style="margin:0">The transformer splits text into subword pieces from one shared multilingual vocabulary (for example, an unfamiliar word becomes a few known fragments). This works for languages without spaces such as Chinese and Japanese, where Count/TF-IDF word features break down. Each token is then turned into a context-aware vector by the network.</p></div>
+  <div class="card reveal" style="margin-top:1.4rem"><h3>How the evaluation avoids leakage</h3><p class="muted" style="margin:0">The published model was fine-tuned by its authors on the <b>train</b> split. Here, candidate models are compared on a <b>validation</b> sample and the chosen model is reported once on a <b>test</b> sample. Exact-duplicate texts are removed from every evaluation sample, and an optional check counts evaluation texts that also occur in the training split. Metrics use macro F1 and balanced accuracy so the smaller Neutral class is not hidden, and are broken down per class, language and domain.</p></div>
+  <div class="card reveal" style="margin-top:1.4rem;border-left:5px solid var(--orange)"><h3>Limitations</h3>
+  <ul class="clean muted" style="margin:0"><li><b>Not tourism-only data.</b> The dataset mixes product, movie, app, tweet, bank and travel reviews; only some domains (e.g. hotel, restaurant, places) are tourist-like. Use the domain filter in <code>evaluate_model.py</code> to measure those.</li><li><b>Label noise.</b> Labels come from aggregated third-party datasets; the public preview shows at least one clearly negative hotel review labelled positive, so scores are bounded by label quality.</li><li><b>Low-resource languages.</b> According to the dataset card, Hindi (~9.4k), Malay (~6.7k) and Italian (~3.0k) have far fewer records than English (~1.5M) or Chinese (~445k), so the model is likely less reliable there and our evaluation samples for them may be small.</li><li><b>Other languages.</b> Languages outside the 16 are not translated; they are still scored but flagged as unsupported.</li><li><b>Short text.</b> Automatic language detection is unreliable for very short reviews; choose the language manually.</li><li><b>Neutral</b> is inherently the most ambiguous class.</li></ul></div>
+</div></section>
+
+<section class="section alt"><div class="container">
+  <div class="section-head reveal"><span class="eyebrow">Future improvements</span><h2>Where the project can go next</h2></div>
+  <div class="grid g4">
+    <div class="card hover reveal"><div class="icon-bubble"><i data-lucide="brain"></i></div><h4>Transformer models</h4><p class="muted small">BERT-style models for nuanced reviews.</p></div>
+    <div class="card hover reveal"><div class="icon-bubble"><i data-lucide="languages"></i></div><h4>Multilingual</h4><p class="muted small">Regional and foreign-language reviews.</p></div>
+    <div class="card hover reveal"><div class="icon-bubble"><i data-lucide="smartphone"></i></div><h4>Live app</h4><p class="muted small">Real-time dashboard or mobile app for tourism boards.</p></div>
+    <div class="card hover reveal"><div class="icon-bubble"><i data-lucide="layers"></i></div><h4>Aspect-based</h4><p class="muted small">Sentiment per aspect: food, staff, cleanliness, price.</p></div>
+  </div>
+</div></section>
+{% endblock %}
